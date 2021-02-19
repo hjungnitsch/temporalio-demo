@@ -1,0 +1,30 @@
+apiVersion: skaffold/v2beta12
+kind: Config
+build:
+  local:
+    push: false
+  artifacts:
+    - image: reise-buchung
+      context: ./reise-buchung
+      jib:
+        type: maven
+        args: ["-Dmaven.test.skip"]
+      sync:
+        auto: true
+    - image: hotel-service
+      context: ./hotel-service
+      jib:
+        args: [ "-Dmaven.test.skip" ]
+        type: maven
+      sync:
+        auto: true
+    - image: flug-service
+      context: ./flug-service
+      jib:
+        args: [ "-Dmaven.test.skip" ]
+        type: maven
+      sync:
+        auto: true
+deploy:
+  kustomize:
+    paths: [./k8s]
